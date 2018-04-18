@@ -7,11 +7,20 @@ from django.http import HttpResponse
 # def index(request):
     # return HttpResponse("Hello, world. You' re at the polls index. ")
 from django. http import HttpResponse
+from django. template import loader
 from . models import Question
+
+
 def index(request):
     latest_question_list = Question. objects. order_by('-pub_date' )[: 5]
-    output = ' , ' . join([q. question_text for q in latest_question_list])
-    return HttpResponse(output)
+    # output = ' , ' . join([q. question_text for q in latest_question_list])
+    # return HttpResponse(output)
+    print("latest_question_list length is:"+str(len(latest_question_list)))
+    template = loader. get_template('polls/index.html' )
+    context = {
+        'latest_question_list' : latest_question_list,
+    }
+    return HttpResponse(template. render(context, request))
 
 # Leave the rest of the views (detail, results, vote) unchanged    
 def detail(request, question_id):
